@@ -294,6 +294,11 @@ class fixture_interface {
  */
 template<typename returntype, typename argtype>
 class fixture_base : public fixture_interface {
+  /**
+   * @brief Invoke setup with an explicit std::any argument.
+   * @param arg Type-erased argument; null pointer converted to nullptr_t.
+   * @return Type-erased setup return value.
+   */
   std::any call_setup(const std::any &arg) override {
     argtype local_arg;
     if constexpr (std::is_pointer<argtype>::value) {
@@ -308,6 +313,10 @@ class fixture_base : public fixture_interface {
     return this->setup(local_arg);
   }
 
+  /**
+   * @brief Invoke setup with the bound std::any argument.
+   * @return Type-erased setup return value.
+   */
   std::any bindcall_setup() override {
     argtype local_arg;
     if constexpr (std::is_pointer<argtype>::value) {
@@ -322,6 +331,11 @@ class fixture_base : public fixture_interface {
     return this->setup(local_arg);
   }
 
+  /**
+   * @brief Invoke the fixture body with an explicit std::any argument.
+   * @param arg Type-erased argument; null pointer converted to nullptr_t.
+   * @return Type-erased fixture body return value.
+   */
   std::any call(const std::any &arg) override {
     argtype local_arg;
     if constexpr (std::is_pointer<argtype>::value) {
@@ -336,6 +350,10 @@ class fixture_base : public fixture_interface {
     return this->operator()(local_arg);
   }
 
+  /**
+   * @brief Invoke the fixture body with the bound std::any argument.
+   * @return Type-erased fixture body return value.
+   */
   std::any bindcall() override {
     argtype local_arg;
     if constexpr (std::is_pointer<argtype>::value) {
@@ -350,6 +368,11 @@ class fixture_base : public fixture_interface {
     return this->operator()(local_arg);
   }
 
+  /**
+   * @brief Invoke teardown with an explicit std::any argument.
+   * @param arg Type-erased argument; null pointer converted to nullptr_t.
+   * @return Type-erased teardown return value.
+   */
   std::any call_teardown(const std::any &arg) override {
     argtype local_arg;
     if constexpr (std::is_pointer<argtype>::value) {
@@ -364,6 +387,10 @@ class fixture_base : public fixture_interface {
     return this->teardown(local_arg);
   }
 
+  /**
+   * @brief Invoke teardown with the bound std::any argument.
+   * @return Type-erased teardown return value.
+   */
   std::any bindcall_teardown() override {
     argtype local_arg;
     if constexpr (std::is_pointer<argtype>::value) {
@@ -589,6 +616,11 @@ class fixture_base : public fixture_interface {
   virtual ~fixture_base() = default;
 
   private:
+  /**
+   * @brief Invoke setup with an explicit wrapped argument.
+   * @param a Wrapped argument; nullptr returns nullptr.
+   * @return Wrapped setup return value.
+   */
   fixture_interface_returntype
   call_setup(const fixture_interface_argtype &a) override {
     if (!a) {
@@ -602,6 +634,10 @@ class fixture_base : public fixture_interface {
     );
   }
 
+  /**
+   * @brief Invoke setup with the bound wrapped argument.
+   * @return Wrapped setup return value.
+   */
   fixture_interface_returntype
   bindcall_setup() override {
     fixture_base_argtype argptr =
@@ -612,6 +648,11 @@ class fixture_base : public fixture_interface {
     );
   }
 
+  /**
+   * @brief Invoke the fixture body with an explicit wrapped argument.
+   * @param a Wrapped argument; nullptr returns nullptr.
+   * @return Wrapped fixture body return value.
+   */
   fixture_interface_returntype
   call(const fixture_interface_argtype &a) override {
     if (!a) {
@@ -625,6 +666,10 @@ class fixture_base : public fixture_interface {
     );
   }
 
+  /**
+   * @brief Invoke the fixture body with the bound wrapped argument.
+   * @return Wrapped fixture body return value.
+   */
   fixture_interface_returntype
   bindcall() override {
     fixture_base_argtype argptr =
@@ -635,6 +680,11 @@ class fixture_base : public fixture_interface {
     );
   }
 
+  /**
+   * @brief Invoke teardown with an explicit wrapped argument.
+   * @param a Wrapped argument; nullptr returns nullptr.
+   * @return Wrapped teardown return value.
+   */
   fixture_interface_returntype
   call_teardown(const fixture_interface_argtype &a) override {
     if (!a) {
@@ -648,6 +698,10 @@ class fixture_base : public fixture_interface {
     );
   }
 
+  /**
+   * @brief Invoke teardown with the bound wrapped argument.
+   * @return Wrapped teardown return value.
+   */
   fixture_interface_returntype
   bindcall_teardown() override {
     fixture_base_argtype argptr =
