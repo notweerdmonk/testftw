@@ -56,6 +56,10 @@
 #include <memory>
 #include <chrono>
 
+#if __cplusplus >= 201703L
+#include <any>
+#endif
+
 #if __cplusplus < 201402L
 
 namespace std {
@@ -116,6 +120,8 @@ namespace std {
 }; /* namespace std */
 
 #endif /* __cplusplus < 201402L */
+
+namespace testftw {
 
 /**
  * @brief Dynamically cast ownership from a base unique_ptr to a derived
@@ -200,8 +206,6 @@ unique_ptr_dynamic_cast(std::unique_ptr<base>& p) {
   } while (0);
 
 #if __cplusplus >= 201703L
-
-#include <any>
 
 /**
  * @brief Type-erased fixture interface for C++17 and newer.
@@ -708,7 +712,7 @@ class fixture_base : public fixture_interface {
   virtual returntype teardown(argtype a) = 0;
 };
 
-#endif
+#endif /* __cplusplus >= 201703L */
 
 /**
  * @brief Abstract testcase interface.
@@ -755,7 +759,7 @@ class testcase_base {
     std::chrono::nanoseconds *pns = nullptr
   ) = 0;
 
-#endif /* __cplusplus < 201703L */
+#endif /* __cplusplus >= 201703L */
 
   /**
    * @brief Destroy the testcase interface.
@@ -905,7 +909,84 @@ class testcase final : public testcase_base<return_type, arg_type> {
     fixtures = fixtures_;
   }
 
-#if __cplusplus < 201703L
+#if __cplusplus >= 201703L
+
+  /**
+   * @brief Run the testcase.
+   *
+   * Timed testcases execute the body @p runs times and optionally populate
+   * total and average durations. Untimed testcases execute the body once.
+   *
+   * @param data Testcase argument.
+   * @param ptotal Optional total duration output.
+   * @param pavg Optional average duration output.
+   * @return Testcase return value.
+   */
+  return_type run(
+      arg_type data,
+      std::chrono::nanoseconds *ptotal = nullptr,
+      std::chrono::nanoseconds *pavg = nullptr
+  ) {
+    if (!fn) {
+      return return_type();
+    }
+
+    for (auto &f : fixtures) {
+      f->bindcall_setup();
+    }
+
+    return_type ret = return_type();
+
+    if constexpr (timed) {
+      auto start = std::chrono::high_resolution_clock::now();
+
+      for (decltype(runs) n = 0; n < runs; ++n) {
+        ret = fn(data, fixtures);
+      }
+
+      auto stop = std::chrono::high_resolution_clock::now();
+      std::chrono::nanoseconds total_duration =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+
+      if (ptotal) {
+        *ptotal = total_duration;
+      }
+
+      if constexpr (runs > 0) {
+        total_duration = total_duration / runs;
+      }
+
+      if (pavg) {
+        *pavg = total_duration;
+      }
+
+    } else {
+      ret = fn(data, fixtures);
+    }
+
+    for (auto &f : fixtures) {
+      f->bindcall_teardown();
+    }
+
+    return ret;
+  }
+
+  /**
+   * @brief Execute the testcase through the base-class interface.
+   * @param data Testcase argument.
+   * @param ptotal Optional total duration output.
+   * @param pns Optional average duration output.
+   * @return Optional testcase return value.
+   */
+  std::optional<return_type> operator()(
+      arg_type data,
+      std::chrono::nanoseconds *ptotal = nullptr,
+      std::chrono::nanoseconds *pns = nullptr
+  ) {
+    return run(data, ptotal, pns);
+  }
+
+#else /* ! __cplusplus >= 201703L */
 
   template <
     bool timed_ = timed,
@@ -995,89 +1076,6 @@ class testcase final : public testcase_base<return_type, arg_type> {
 
     return ret;
   }
-
-#else /* __cplusplus >= 201703L */
-
-  /**
-   * @brief Run the testcase.
-   *
-   * Timed testcases execute the body @p runs times and optionally populate
-   * total and average durations. Untimed testcases execute the body once.
-   *
-   * @param data Testcase argument.
-   * @param ptotal Optional total duration output.
-   * @param pavg Optional average duration output.
-   * @return Testcase return value.
-   */
-  return_type run(
-      arg_type data,
-      std::chrono::nanoseconds *ptotal = nullptr,
-      std::chrono::nanoseconds *pavg = nullptr
-  ) {
-    if (!fn) {
-      return return_type();
-    }
-
-    for (auto &f : fixtures) {
-      f->bindcall_setup();
-    }
-
-    return_type ret = return_type();
-
-    if constexpr (timed) {
-      auto start = std::chrono::high_resolution_clock::now();
-
-      for (decltype(runs) n = 0; n < runs; ++n) {
-        ret = fn(data, fixtures);
-      }
-
-      auto stop = std::chrono::high_resolution_clock::now();
-      std::chrono::nanoseconds total_duration =
-        std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
-
-      if (ptotal) {
-        *ptotal = total_duration;
-      }
-
-      if constexpr (runs > 0) {
-        total_duration = total_duration / runs;
-      }
-
-      if (pavg) {
-        *pavg = total_duration;
-      }
-
-    } else {
-      ret = fn(data, fixtures);
-    }
-
-    for (auto &f : fixtures) {
-      f->bindcall_teardown();
-    }
-
-    return ret;
-  }
-
-#endif /* __cplusplus < 201703L */
-
-#if __cplusplus >= 201703L
-
-  /**
-   * @brief Execute the testcase through the base-class interface.
-   * @param data Testcase argument.
-   * @param ptotal Optional total duration output.
-   * @param pns Optional average duration output.
-   * @return Optional testcase return value.
-   */
-  std::optional<return_type> operator()(
-      arg_type data,
-      std::chrono::nanoseconds *ptotal = nullptr,
-      std::chrono::nanoseconds *pns = nullptr
-  ) {
-    return run(data, ptotal, pns);
-  }
-
-#else /* ! __cplusplus >= 201703L */
 
   /**
    * @brief Execute the testcase through the base-class interface.
@@ -1385,5 +1383,7 @@ class testsuite {
     }
   }
 };
+
+} /* namespace testftw */
 
 #endif /* _TESTFTW_HPP_ */

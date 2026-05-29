@@ -1,5 +1,7 @@
 #include <testftw.hpp>
 
+using namespace testftw;
+
 #include <cassert>
 #include <memory>
 #include <vector>

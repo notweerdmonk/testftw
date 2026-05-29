@@ -54,7 +54,9 @@ cp testftw.hpp /path/to/your/project/
 Or include it directly from this repository:
 
 ```cpp
-#include "testftw.hpp"
+#include <testftw.hpp>
+
+using namespace testftw;
 ```
 
 No build system configuration is required. The header is self-contained and uses only standard library headers.
@@ -62,9 +64,11 @@ No build system configuration is required. The header is self-contained and uses
 ## Quick Start
 
 ```cpp
-#include "testftw.hpp"
+#include <testftw.hpp>
 #include <cassert>
 #include <iostream>
+
+using namespace testftw;
 
 // Define a fixture with setup/call/teardown lifecycle
 class counter_fixture : public fixture_base<int, int> {
@@ -122,9 +126,11 @@ g++ -std=c++17 -o example example.cpp && ./example
 Demonstrates the fixture lifecycle with direct and bound calls:
 
 ```cpp
-#include "testftw.hpp"
+#include <testftw.hpp>
 #include <cassert>
 #include <vector>
+
+using namespace testftw;
 
 class log_fixture : public fixture_base<int, int> {
   std::vector<int> *events;
@@ -170,9 +176,11 @@ int main() {
 Create testcases that measure execution time:
 
 ```cpp
-#include "testftw.hpp"
+#include <testftw.hpp>
 #include <cassert>
 #include <iostream>
+
+using namespace testftw;
 
 int fibonacci(int n, std::vector<fixture_interface*>) {
   if (n <= 1) return n;
@@ -202,8 +210,10 @@ int main() {
 Group testcases into a suite with shared fixtures:
 
 ```cpp
-#include "testftw.hpp"
+#include <testftw.hpp>
 #include <cassert>
+
+using namespace testftw;
 
 int test_add(int, std::vector<fixture_interface*>) {
   assert(1 + 1 == 2);
@@ -234,8 +244,10 @@ int main() {
 Use pointer arguments with automatic null detection:
 
 ```cpp
-#include "testftw.hpp"
+#include <testftw.hpp>
 #include <cassert>
+
+using namespace testftw;
 
 class ptr_fixture : public fixture_base<int, void*> {
   bool was_null = false;
