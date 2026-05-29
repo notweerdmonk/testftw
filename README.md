@@ -415,6 +415,11 @@ public:
 - `returntype` — Return type for setup, body, and teardown operations
 - `argtype` — Argument type accepted by the fixture
 
+**Static Methods:**
+
+- `makearg(argtype a)` — Create a bound argument object for this fixture type. Returns `fixture_interface_argtype` (a `std::shared_ptr<std::any>` in C++17+ or a shared polymorphic wrapper in pre-C++17).
+- `retval(const fixture_interface_returntype& r)` — *(Pre-C++17 only)* Cast a type-erased return wrapper to this fixture's typed return wrapper. Returns `fixture_base_returntype` or `nullptr` on type mismatch.
+
 **Pre-C++17 Additional Methods:**
 ```cpp
 // Cast type-erased return wrapper to typed wrapper
