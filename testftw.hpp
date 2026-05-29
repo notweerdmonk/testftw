@@ -57,6 +57,32 @@
 #include <chrono>
 
 #if __cplusplus >= 201703L
+
+#if defined(__GNUC__)
+
+#define UNUSED [[gnu::maybe_unused]]
+
+#elif defined(__clang__)
+
+#define UNUSED [[clang::maybe_unused]]
+
+#elif defined(_MSC_VER)
+
+#define UNUSED [[msvc::maybe_unused]]
+
+#endif
+
+#else
+
+#if defined(__GNUC__) || defined(__clang__)
+
+#define UNUSED __attribute__((unused))
+
+#endif
+
+#endif /* __cplusplus >= 201703L */
+
+#if __cplusplus >= 201703L
 #include <any>
 #endif
 
@@ -1108,12 +1134,9 @@ class testcase final : public testcase_base<return_type, arg_type> {
    */
   return_type run(
       arg_type data,
-      std::chrono::nanoseconds *ptotal = nullptr,
-      std::chrono::nanoseconds *pavg = nullptr
+      UNUSED std::chrono::nanoseconds *ptotal = nullptr,
+      UNUSED std::chrono::nanoseconds *pavg = nullptr
   ) {
-    (void)ptotal;
-    (void)pavg;
-
     if (!fn) {
       return return_type();
     }
@@ -1406,11 +1429,9 @@ class testsuite {
    * testcases. When @p ptimes is provided, it must contain at least one entry
    * per stored testcase.
    *
-   * @param data Reserved suite-level data argument.
    * @param ptimes Optional timing output vector indexed by testcase position.
    */
-  void run(arg_type data, std::vector<times_type> *ptimes = nullptr) {
-    (void)data;
+  void run(std::vector<times_type> *ptimes = nullptr) {
 
     for (auto &f : fixtures) {
       f->bindcall_setup();
