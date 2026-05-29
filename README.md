@@ -734,16 +734,6 @@ Override the compiler with `CXX`:
 make check CXX=clang++
 ```
 
-### Scratch Build
-
-Build the experimental program:
-
-```bash
-cd scratch
-make
-./experiment
-```
-
 ## Compatibility
 
 | Standard | Status | Notes |
@@ -804,8 +794,8 @@ Documentation is output to `docs/html/`.
 
 ### Commit Guidelines
 
-- Use imperative mood: "Add feature" not "Added feature"
 - One concise sentence per commit
+- Follow up in paragraphs with details if you may
 - Capitalize first word
 
 ### Pull Requests
