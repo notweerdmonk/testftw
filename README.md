@@ -2,6 +2,7 @@
 
 > Header-only C++ testing framework for the win
 
+[![CI](https://github.com/notweerdmonk/testftw/actions/workflows/ci.yml/badge.svg)](https://github.com/notweerdmonk/testftw/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![C++11](https://img.shields.io/badge/C%2B%2B-11-blue.svg)](https://en.cppreference.com/w/cpp/11)
 [![C++23](https://img.shields.io/badge/C%2B%2B-23-blue.svg)](https://en.cppreference.com/w/cpp/23)
