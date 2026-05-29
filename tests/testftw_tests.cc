@@ -292,7 +292,7 @@ static int test_testsuite_add_remove(
   suite.add(&first, ctx);
   suite.add(&second, ctx);
   suite.remove(&first, ctx);
-  suite.run(ctx);
+  suite.run();
 
   assert(ctx->suite_first_count == 0);
   assert(ctx->suite_second_count == 1);
@@ -322,7 +322,7 @@ static int test_testsuite_bound_lifecycle(
       {{&fixture, fixture_arg}}
   );
 
-  suite.run(ctx);
+  suite.run();
   expect_events(ctx->events, std::vector<int>{1006, 4000, 3006});
   return 0;
 }
@@ -352,7 +352,7 @@ int main() {
   suite.add(&t8, &ctx);
   suite.add(&t9, &ctx);
   suite.add(&t10, &ctx);
-  suite.run(&ctx);
+  suite.run();
 
   return 0;
 }
