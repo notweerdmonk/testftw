@@ -1,0 +1,74 @@
+# Doxyfile 1.9.1
+#
+# Generated from `doxygen -g -` and edited for the testftw header-only API.
+
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = "testftw"
+PROJECT_BRIEF          = "Header-only C++ testing framework"
+OUTPUT_DIRECTORY       = docs
+
+INPUT                  = testftw.hpp
+FILE_PATTERNS          = *.hpp
+RECURSIVE              = NO
+EXCLUDE                =
+
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+GENERATE_LATEX         = NO
+GENERATE_XML           = NO
+GENERATE_MAN           = NO
+GENERATE_RTF           = NO
+
+EXTRACT_ALL            = NO
+EXTRACT_PRIVATE        = NO
+EXTRACT_PRIV_VIRTUAL   = NO
+EXTRACT_PACKAGE        = NO
+EXTRACT_STATIC         = YES
+HIDE_UNDOC_MEMBERS     = NO
+HIDE_UNDOC_CLASSES     = NO
+
+JAVADOC_AUTOBRIEF      = NO
+QT_AUTOBRIEF           = NO
+MULTILINE_CPP_IS_BRIEF = NO
+
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+WARN_NO_PARAMDOC       = YES
+WARN_AS_ERROR          = NO
+
+QUIET                  = NO
+WARN_FORMAT            = "$file:$line: $text"
+
+OPTIMIZE_OUTPUT_FOR_C  = NO
+OPTIMIZE_OUTPUT_JAVA   = NO
+OPTIMIZE_FOR_FORTRAN   = NO
+OPTIMIZE_OUTPUT_VHDL   = NO
+
+FULL_PATH_NAMES        = NO
+STRIP_FROM_PATH        =
+SORT_MEMBER_DOCS       = YES
+SORT_BRIEF_DOCS        = NO
+
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = NO
+REFERENCED_BY_RELATION = YES
+REFERENCES_RELATION    = YES
+
+ALPHABETICAL_INDEX     = YES
+GENERATE_TREEVIEW      = YES
+DISABLE_INDEX          = NO
+SEARCHENGINE           = YES
+
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = NO
+EXPAND_ONLY_PREDEF     = NO
+PREDEFINED             = __cplusplus=202302L
+
+BUILTIN_STL_SUPPORT    = YES
+CPP_CLI_SUPPORT        = NO
+SIP_SUPPORT            = NO
+IDL_PROPERTY_SUPPORT   = YES
+
+MARKDOWN_SUPPORT       = YES
+AUTOLINK_SUPPORT       = YES
