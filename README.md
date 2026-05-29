@@ -810,4 +810,5 @@ Copyright (C) 2026 notweerdmonk
 ## Acnkowledgements
 
 Assisted-by: Codex:gpt-5.5-medium
+
 Assisted-by: OpenCode:mimo-v2.5-free
