@@ -7,7 +7,7 @@ all: $(TEST_DIR)
 $(TEST_DIR):
 	$(MAKE) -C $(TEST_DIR)
 
-check: | $(TEST_DIR)
+check:
 	$(MAKE) -C $(TEST_DIR) $@
 
 asan:
